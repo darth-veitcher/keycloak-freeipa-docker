@@ -25,8 +25,8 @@ echo "keycloak-freeipa-trigger.sh: ipa-server-configure-first finished";
 echo $PASSWORD | kinit admin
 if ipa user-find hnelson; then
    kdestroy
-   echo "keycloak-freeipa-trigger.sh: Example users hnelson and jduke already exists. Skip adding them";   
-else 
+   echo "keycloak-freeipa-trigger.sh: Example users hnelson and jduke already exists. Skip adding them";
+else
    ipa user-add hnelson --first=Horatio --last=Nelson
    echo "Temp123
    Temp123" | ipa passwd hnelson
@@ -54,7 +54,7 @@ export KERBEROS_REALM=$(cat /etc/krb5.conf | grep default_realm | awk -F"default
 
 echo "keycloak-freeipa-trigger.sh: PASSWORD=$PASSWORD, KERBEROS_REALM=$KERBEROS_REALM, HOST=$HOST, LDAP_BASE_DN=$LDAP_BASE_DN";
 
-cat /keycloak-work/freeipa-realm.json | 
+cat /keycloak-work/freeipa-realm.json |
 sed -i -e "s/\${ldapBaseDn}/$LDAP_BASE_DN/" /keycloak-work/freeipa-realm.json
 sed -i -e "s/\${host}/$HOST/" /keycloak-work/freeipa-realm.json
 sed -i -e "s/\${kerberosRealm}/$KERBEROS_REALM/" /keycloak-work/freeipa-realm.json
@@ -64,18 +64,18 @@ echo "keycloak-freeipa-trigger.sh: File formatting finished. Final file: ";
 cat /keycloak-work/freeipa-realm.json
 
 # Done here instead of in Dockerfile just due to size of the image
-if ls /keycloak-work/keycloak-demo* ; then
-  echo "keycloak-freeipa-trigger.sh: Keycloak already prepared. Skip preparing";
-else
+#if ls /keycloak-work/keycloak-demo* ; then
+#  echo "keycloak-freeipa-trigger.sh: Keycloak already prepared. Skip preparing";
+#else
   echo "keycloak-freeipa-trigger.sh: Preparing keycloak";
-  cd /keycloak-work 
+  cd /keycloak-work
   tar xf /keycloak-work/keycloak-dist/keycloak-demo*.tar.gz
   mv /keycloak-work/keycloak-demo*/keycloak kc
-fi;
+#fi;
 
-echo "Set Java 8 as default java"
-export JAVA_HOME="/keycloak-work/keycloak-dist/openjdk8";
-export PATH="$JAVA_HOME/bin:$PATH";
+#echo "Set Java 8 as default java"
+#export JAVA_HOME="/keycloak-work/keycloak-dist/openjdk8";
+#export PATH="$JAVA_HOME/bin:$PATH";
 
 echo "keycloak-freeipa-trigger.sh: Running keycloak";
 cd /keycloak-work/kc/bin
